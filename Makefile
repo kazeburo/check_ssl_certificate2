@@ -1,4 +1,4 @@
-VERSION=0.0.3
+VERSION=0.0.1
 LDFLAGS=-ldflags "-w -s -X main.version=${VERSION} "
 
 all: check_ssl_certificate2
