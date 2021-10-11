@@ -21,27 +21,30 @@ const WARNING = 1
 const OK = 0
 
 type commandOpts struct {
-	Timeout   time.Duration `long:"timeout" default:"10s" description:"Timeout to wait for connection"`
-	Hostname  string        `short:"H" long:"hostname" description:"IP address or Host name" default:"127.0.0.1"`
-	Port      int           `short:"p" long:"port" description:"Port number" default:"443"`
-	SNI       string        `long:"sni" description:"sepecify hostname for SNI"`
-	VerifySNI bool          `long:"verify-sni" description:"verify sni hostname"`
-	Crit      int64         `short:"c" long:"critical" default:"14" description:"The critical threshold in days before expiry"`
-	TCP4      bool          `short:"4" description:"use tcp4 only"`
-	TCP6      bool          `short:"6" description:"use tcp6 only"`
-	Version   bool          `short:"v" long:"version" description:"Show version"`
+	Timeout      time.Duration `long:"timeout" default:"10s" description:"Timeout to wait for connection"`
+	Hostname     string        `short:"H" long:"hostname" description:"IP address or Host name" default:"127.0.0.1"`
+	Port         int           `short:"p" long:"port" description:"Port number" default:"443"`
+	SNI          string        `long:"sni" description:"sepecify hostname for SNI"`
+	VerifySNI    bool          `long:"verify-sni" description:"verify sni hostname"`
+	VerifyChains bool          `long:"verify-chains" description:"verify all certificate chains"`
+	Crit         int64         `short:"c" long:"critical" default:"14" description:"The critical threshold in days before expiry"`
+	TCP4         bool          `short:"4" description:"use tcp4 only"`
+	TCP6         bool          `short:"6" description:"use tcp6 only"`
+	Version      bool          `short:"v" long:"version" description:"Show version"`
 }
 
-func doConnect(opts commandOpts) (string, error) {
+func verifyCertificate(opts commandOpts) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), opts.Timeout)
 	defer cancel()
 	ch := make(chan error, 1)
 	start := time.Now()
-	var cert *x509.Certificate
+	certs := make([]*x509.Certificate, 0)
 	go func() {
 		tlsConfig := &tls.Config{
 			InsecureSkipVerify: true,
-			ServerName:         opts.SNI,
+		}
+		if opts.SNI != "" {
+			tlsConfig.ServerName = opts.SNI
 		}
 		dialer := &net.Dialer{
 			Timeout:   opts.Timeout,
@@ -69,8 +72,7 @@ func doConnect(opts commandOpts) (string, error) {
 		}
 		defer tlsconn.Close()
 
-		certs := tlsconn.ConnectionState().PeerCertificates
-		cert = certs[0]
+		certs = tlsconn.ConnectionState().PeerCertificates
 		ch <- nil
 	}()
 
@@ -81,7 +83,7 @@ func doConnect(opts commandOpts) (string, error) {
 	case <-ctx.Done():
 		err = fmt.Errorf("connection or tls handshake timeout")
 	}
-	if err == nil && cert == nil {
+	if err == nil && len(certs) == 0 {
 		err = fmt.Errorf("failed fetch certificate from target host")
 	}
 
@@ -93,6 +95,25 @@ func doConnect(opts commandOpts) (string, error) {
 
 	if err != nil {
 		return "", fmt.Errorf("SSL CERTIFICATE CRITICAL: %v on %s", err, displayServer)
+	}
+
+	cert := certs[0]
+
+	if opts.VerifyChains {
+		verifyOpts := x509.VerifyOptions{
+			CurrentTime:   time.Now(),
+			Intermediates: x509.NewCertPool(),
+		}
+		for _, c := range certs[1:] {
+			verifyOpts.Intermediates.AddCert(c)
+		}
+		verifiedChains, err := certs[0].Verify(verifyOpts)
+		if err != nil {
+			return "", fmt.Errorf("SSL CERTIFICATE CRITICAL: failed verify chains [%v] on %s", err, displayServer)
+		}
+		if len(verifiedChains) == 0 {
+			return "", fmt.Errorf("SSL CERTIFICATE CRITICAL: failed verify chains [%v] on %s", "no verified chains", displayServer)
+		}
 	}
 
 	if opts.VerifySNI {
@@ -163,7 +184,7 @@ func _main() int {
 		return UNKNOWN
 	}
 
-	msg, err := doConnect(opts)
+	msg, err := verifyCertificate(opts)
 	if err != nil {
 		fmt.Println(err.Error())
 		return CRITICAL
