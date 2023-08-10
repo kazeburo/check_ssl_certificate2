@@ -5,11 +5,11 @@ all: check_ssl_certificate2
 
 .PHONY: check_ssl_certificate2
 
-check_ssl_certificate2: main.go
-	go build $(LDFLAGS) -o check_ssl_certificate2 main.go
+check_ssl_certificate2: main.go certificate.go
+	go build $(LDFLAGS) -o check_ssl_certificate2 certificate.go main.go
 
-linux: main.go
-	GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o check_ssl_certificate2 main.go
+linux: main.go certificate.go
+	GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o check_ssl_certificate2 certificate.go main.go
 
 check:
 	go test ./...
