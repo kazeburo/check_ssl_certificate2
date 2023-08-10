@@ -19,3 +19,9 @@ jobs:
 
       - name: test
         run: make check
+
+      - name: Snapshot GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: snapshot --rm-dist
