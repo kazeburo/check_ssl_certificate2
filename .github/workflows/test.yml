@@ -21,7 +21,7 @@ jobs:
         run: make check
 
       - name: Snapshot GoReleaser
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v4
         with:
           version: latest
-          args: snapshot --rm-dist
+          args: build --snapshot
