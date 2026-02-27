@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.0.6](https://github.com/kazeburo/check_ssl_certificate2/compare/v0.0.5...v0.0.6) - 2026-02-27
+- Add files via upload by @kazeburo in https://github.com/kazeburo/check_ssl_certificate2/pull/4
+- ci: bump the dependencies group with 4 updates by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/6
+
 ## [v0.0.5](https://github.com/kazeburo/check_ssl_certificate2/compare/v0.0.4...v0.0.5) - 2025-09-25
 - use tagpr for release by @kazeburo in https://github.com/kazeburo/check_ssl_certificate2/pull/2
 
