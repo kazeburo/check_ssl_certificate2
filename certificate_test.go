@@ -28,11 +28,9 @@ func TestVerifyOK(t *testing.T) {
 }
 
 func TestWeakKeyExchange(t *testing.T) {
-	{
-		opt := newOpt("static-rsa.badssl.com")
-		_, err := opt.Verify()
-		assert.NoError(t, err)
-	}
+	opt := newOpt("static-rsa.badssl.com")
+	_, err := opt.Verify()
+	assert.NoError(t, err)
 }
 
 func TestVerifyExpired(t *testing.T) {
