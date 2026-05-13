@@ -1,3 +1,8 @@
+// https://github.com/golang/go/issues/63413
+// RSA key exchange is disabled by default in Go 1.20, but some servers still use it, so we need to enable it for compatibility.
+//
+//go:debug tlsrsakex=1
+
 package main
 
 import (
