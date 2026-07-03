@@ -1,6 +1,6 @@
 module github.com/kazeburo/check_ssl_certificate2
 
-go 1.24.0
+go 1.25.0
 
 require github.com/jessevdk/go-flags v1.6.1
 
@@ -12,5 +12,5 @@ require (
 
 require (
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
 )
