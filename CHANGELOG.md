@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.0.7](https://github.com/kazeburo/check_ssl_certificate2/compare/v0.0.6...v0.0.7) - 2026-07-11
+
+- ci: bump the dependencies group with 2 updates by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/12
+- ci: bump the dependencies group across 1 directory with 4 updates by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/16
+- Change Dependabot update schedule to weekly by @kazeburo in https://github.com/kazeburo/check_ssl_certificate2/pull/17
+- Retry failed tests for stability by @kazeburo in https://github.com/kazeburo/check_ssl_certificate2/pull/19
+- go: bump golang.org/x/sys from 0.36.0 to 0.46.0 in the dependencies group across 1 directory by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/18
+- ci: bump goreleaser/goreleaser-action from 7.2.2 to 7.2.3 in the dependencies group by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/21
+- go: bump golang.org/x/sys from 0.46.0 to 0.47.0 in the dependencies group by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/20
+
 ## [v0.0.6](https://github.com/kazeburo/check_ssl_certificate2/compare/v0.0.5...v0.0.6) - 2026-05-13
 - Add files via upload by @kazeburo in https://github.com/kazeburo/check_ssl_certificate2/pull/4
 - ci: bump the dependencies group with 4 updates by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/6
