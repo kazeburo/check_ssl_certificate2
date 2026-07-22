@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.0.8](https://github.com/monitoring-forge/check_ssl_certificate2/compare/v0.0.7...v0.0.8) - 2026-07-22
+
+- respository transfer and refactor long function by @kazeburo in https://github.com/monitoring-forge/check_ssl_certificate2/pull/22
+
 ## [v0.0.7](https://github.com/kazeburo/check_ssl_certificate2/compare/v0.0.6...v0.0.7) - 2026-07-11
 
 - ci: bump the dependencies group with 2 updates by @dependabot[bot] in https://github.com/kazeburo/check_ssl_certificate2/pull/12
