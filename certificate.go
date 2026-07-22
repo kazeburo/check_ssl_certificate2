@@ -27,15 +27,15 @@ type Opt struct {
 	Version      bool          `short:"v" long:"version" description:"Show version"`
 }
 
-func (opt *Opt) Verify() (string, error) {
+func (opt *Opt) Fetch() ([]*x509.Certificate, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), opt.Timeout)
 	defer cancel()
 	ch := make(chan error, 1)
-	start := time.Now()
 	certs := make([]*x509.Certificate, 0)
 	go func() {
 		tlsConfig := &tls.Config{
-			InsecureSkipVerify: true,
+			// only used for fetching the certificate, so we don't need to verify it here
+			InsecureSkipVerify: true, // NOSONAR
 		}
 		if opt.SNI != "" {
 			tlsConfig.ServerName = opt.SNI
@@ -78,9 +78,18 @@ func (opt *Opt) Verify() (string, error) {
 		err = fmt.Errorf("connection or tls handshake timeout")
 	}
 	if err == nil && len(certs) == 0 {
-		err = fmt.Errorf("failed fetch certificate from target host")
+		err = fmt.Errorf("failed to fetch certificate from target host")
+	}
+	if err != nil {
+		return nil, err
 	}
 
+	return certs, nil
+}
+
+func (opt *Opt) Verify() (string, error) {
+	start := time.Now()
+	certs, err := opt.Fetch()
 	displaySNI := opt.SNI
 	if displaySNI == "" {
 		displaySNI = "-"
