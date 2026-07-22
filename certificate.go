@@ -78,7 +78,7 @@ func (opt *Opt) Fetch() ([]*x509.Certificate, error) {
 		err = fmt.Errorf("connection or tls handshake timeout")
 	}
 	if err == nil && len(certs) == 0 {
-		err = fmt.Errorf("failed fetch certificate from target host")
+		err = fmt.Errorf("failed to fetch certificate from target host")
 	}
 	if err != nil {
 		return nil, err
@@ -126,7 +126,7 @@ func (opt *Opt) Verify() (string, error) {
 		}
 	}
 
-	duration := time.Since(start) // start is undefined, should be defined at the beginning of Verify()
+	duration := time.Since(start)
 
 	daysRemain := int64(cert.NotAfter.Sub(time.Now().UTC()).Hours() / 24)
 	absRemain := daysRemain
