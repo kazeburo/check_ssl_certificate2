@@ -1,4 +1,4 @@
-module github.com/kazeburo/check_ssl_certificate2
+module github.com/monitoring-forge/check_ssl_certificate2
 
 go 1.25.0
 
